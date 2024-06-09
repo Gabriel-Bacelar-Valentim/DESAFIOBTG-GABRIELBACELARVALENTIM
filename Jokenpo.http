@@ -1,0 +1,6 @@
+@Jokenpo_HostAddress = http://localhost:5198
+
+GET {{Jokenpo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
