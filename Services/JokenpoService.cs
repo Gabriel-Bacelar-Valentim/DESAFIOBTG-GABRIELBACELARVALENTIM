@@ -1,4 +1,5 @@
 ﻿using Jokenpo.Models;
+using System.Linq;
 
 namespace Jokenpo.Services
 {
@@ -22,15 +23,17 @@ namespace Jokenpo.Services
 
         }
 
-        public void CadastrarJogada(string jogadorNome, Jogadas jogada)
+        public Jogadas CadastrarJogada(string jogadorNome, Jogadas jogada)
         {
             var jogador = _jogadores.First(jgd => jgd.Nome == jogadorNome);
             if (jogador != null)
             {
                 jogador.Jogada = jogada;
                 _jogadas.Add(jogador);
-            }
 
+            return jogada;
+            }
+            return null;
         }
         public List<Jogador> JogadoresCadastrados()
         {
@@ -63,20 +66,20 @@ namespace Jokenpo.Services
 
         private Jogador VencedorRodada(List<Jogador> jogadas)
         {
-            var jogadasVencedoras = new Dictionary<Jogadas, List<Jogadas>>
+            var jogadasVencedoras = new Dictionary<string, List<string>>
             {
-                { Jogadas.Pedra, new List<Jogadas> { Jogadas.Tesoura, Jogadas.Lagarto } },
-                { Jogadas.Papel, new List<Jogadas> { Jogadas.Pedra, Jogadas.Spock } },
-                { Jogadas.Tesoura, new List<Jogadas> { Jogadas.Papel, Jogadas.Lagarto } },
-                { Jogadas.Lagarto, new List<Jogadas> { Jogadas.Papel, Jogadas.Spock } },
-                { Jogadas.Spock, new List<Jogadas> { Jogadas.Pedra, Jogadas.Tesoura } }
+                { Jogadas.Pedra, new List<string> { Jogadas.Tesoura, Jogadas.Lagarto } },
+                { Jogadas.Papel, new List<string> { Jogadas.Pedra, Jogadas.Spock } },
+                { Jogadas.Tesoura, new List<string> { Jogadas.Papel, Jogadas.Lagarto } },
+                { Jogadas.Lagarto, new List<string> { Jogadas.Papel, Jogadas.Spock } },
+                { Jogadas.Spock, new List<string> { Jogadas.Pedra, Jogadas.Tesoura } }
             };
 
-            var vitorias = new Dictionary<Jogador, int>();
+            var vitorias = new Dictionary<string, int>();
 
             foreach (var jogador in jogadas)
             {
-                vitorias[jogador] = 0;
+                vitorias[jogador.Nome] = 0;
             }
 
             foreach (var jogador1 in jogadas)
@@ -85,9 +88,9 @@ namespace Jokenpo.Services
                 {
                     if (jogador1 == jogador2) continue;
 
-                    if (jogadasVencedoras[jogador1.Jogada].Contains(jogador2.Jogada))
+                    if (jogadasVencedoras[jogador1.Jogada.ToString()].Contains(jogador2.Jogada.ToString()))
                     {
-                        vitorias[jogador1]++;
+                        vitorias[jogador1.Nome]++;
                     }
                 }
             }
