@@ -9,5 +9,3 @@ Será necessário baixar os seguintes pacotes do NuGet: Newtonsoft.Json/ Swashbu
 Passo 3:
 Ao rodar a aplicação irá abrir o Swagger com os metodos aplicados
 
-Olá, eu tive que refazer o trabalho pois o modelo que eu criei nao estava aceitando o swagger.
-Estou informando-os para não acharem que eu fiz de ultima hora
