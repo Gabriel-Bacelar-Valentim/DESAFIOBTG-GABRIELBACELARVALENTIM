@@ -20,7 +20,7 @@ namespace Jokenpo.Controllers
         }
 
         [HttpPost("jogador")]
-        public ActionResult<Jogador> CadastrarJogador([FromBody] string nome)
+        public ActionResult<Jogador> Post( string nome)
         {
             var jogador = _jokenpoService.CadastrarJogador(nome);
             return Ok(jogador);
