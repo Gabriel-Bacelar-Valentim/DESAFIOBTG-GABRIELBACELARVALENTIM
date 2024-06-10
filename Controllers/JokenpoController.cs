@@ -1,6 +1,9 @@
 ﻿using Jokenpo.Models;
 using Jokenpo.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Text.Json.Serialization;
 
 namespace Jokenpo.Controllers
 {
@@ -23,18 +26,27 @@ namespace Jokenpo.Controllers
             return Ok(jogador);
         }
 
+        [HttpPost("jogada")]
+        public ActionResult Post(string jogadorNome, string jogada)
+        {
+            if (!Enum.TryParse<Jogadas>(jogada, true, out var jogadaEnum))
+            {
+                return BadRequest("Jogada inválida.");
+            }
+
+            var resultadoJogada = _jokenpoService.CadastrarJogada(jogadorNome, jogadaEnum);
+            if (resultadoJogada != default(Jogadas))
+            {
+                return Ok(JsonConvert.SerializeObject (resultadoJogada.ToString()));
+            }
+            return BadRequest("Jogador não encontrado.");
+        }
+
         [HttpDelete("jogador/{jogadorNome}")]
         public ActionResult RemoverJogador(string jogadorNome)
         {
             _jokenpoService.RemoverJogador(jogadorNome);
             return NoContent();
-        }
-
-        [HttpPost("jogada")]
-        public ActionResult Post( string jogadorNome, Jogadas jogada)
-        {
-            _jokenpoService.CadastrarJogada(jogadorNome, jogada);
-            return Ok(jogada);
         }
 
         [HttpGet("jogadores")]
@@ -45,17 +57,17 @@ namespace Jokenpo.Controllers
         }
 
         [HttpGet("jogadas")]
-        public ActionResult<List<Jogador>> JogadasRealizadas()
+        public ActionResult <Jogador> JogadasRealizadas()
         {
             var jogadas = _jokenpoService.JogadasRealizadas();
-            return Ok(jogadas);
+            return Ok(JsonConvert.SerializeObject(jogadas));
         }
 
         [HttpGet("rodada")]
         public ActionResult<string> FinalizarRodada()
         {
             var resultadoRodada = _jokenpoService.FinalizarRodada();
-            return Ok(resultadoRodada);
+            return Ok(JsonConvert.SerializeObject(resultadoRodada));
         }
     }
 }
