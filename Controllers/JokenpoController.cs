@@ -19,14 +19,14 @@ namespace Jokenpo.Controllers
             _jokenpoService = jokenpoService;
         }
 
-        [HttpPost("jogador")]
+        [HttpPost("Cadastrar jogador")]
         public ActionResult<Jogador> Post( string nome)
         {
             var jogador = _jokenpoService.CadastrarJogador(nome);
             return Ok(jogador);
         }
 
-        [HttpPost("jogada")]
+        [HttpPost("Inserir jogada")]
         public ActionResult Post(string jogadorNome, string jogada)
         {
             if (!Enum.TryParse<Jogadas>(jogada, true, out var jogadaEnum))
@@ -42,31 +42,32 @@ namespace Jokenpo.Controllers
             return BadRequest("Jogador não encontrado.");
         }
 
-        [HttpDelete("jogador/{jogadorNome}")]
+        [HttpDelete("Deletar jogador/{jogadorNome}")]
         public ActionResult RemoverJogador(string jogadorNome)
         {
             _jokenpoService.RemoverJogador(jogadorNome);
             return NoContent();
         }
 
-        [HttpGet("jogadores")]
+        [HttpGet("Listar jogadores")]
         public ActionResult<List<Jogador>> JogadoresCadastrados()
         {
             var jogadores = _jokenpoService.JogadoresCadastrados();
             return Ok(jogadores);
         }
 
-        [HttpGet("jogadas")]
+        [HttpGet("Listar jogadas")]
         public ActionResult <Jogador> JogadasRealizadas()
         {
             var jogadas = _jokenpoService.JogadasRealizadas();
             return Ok(JsonConvert.SerializeObject(jogadas));
         }
 
-        [HttpGet("rodada")]
+        [HttpGet("Listar Rodada")]
         public ActionResult<string> FinalizarRodada()
         {
             var resultadoRodada = _jokenpoService.FinalizarRodada();
+            _jokenpoService.ResetarJogadas();
             return Ok(JsonConvert.SerializeObject(resultadoRodada));
         }
     }

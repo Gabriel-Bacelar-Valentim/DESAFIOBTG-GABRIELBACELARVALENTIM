@@ -5,5 +5,6 @@
         public int Id { get; set; }
         public string Nome { get; set; }
         public Jogadas Jogada { get; set; }
+        public int Vitorias { get; set; } = 0;
     }
 }
